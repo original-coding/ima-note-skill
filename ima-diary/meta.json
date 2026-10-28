@@ -1,0 +1,17 @@
+{
+  "name": "ima-diary",
+  "version": "1.0.0",
+  "description": "个人日记技能：一天一篇、标题为 YYYY-MM-DD，基于 ima-skills 的笔记接口",
+  "requires": {
+    "skill": "ima-skill",
+    "minVersion": "1.1.10",
+    "reason": "复用 ima_api.cjs 的凭证读取、请求头与更新检查"
+  },
+  "required_binaries": [
+    {
+      "name": "node",
+      "min_version": "18.0.0",
+      "reason": "运行 diary.cjs，并通过子进程调用 ima_api.cjs"
+    }
+  ]
+}

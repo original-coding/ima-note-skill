@@ -1,0 +1,14 @@
+{
+  "name": "ima-note-skill",
+  "version": "1.0.0",
+  "private": true,
+  "description": "跟踪上游 ima-skills 1.1.10，并提供 ima-diary 个人日记技能",
+  "scripts": {
+    "test": "node --test ima-diary/tests/core.test.cjs ima-diary/tests/service.test.cjs ima-diary/tests/cli.test.cjs ima-diary/tests/dependency.test.cjs ima-diary/tests/skill.test.cjs ima-diary/tests/config.test.cjs ima-diary/tests/render.test.cjs scripts/install.test.cjs",
+    "diary": "node ima-diary/scripts/diary.cjs",
+    "install:agents": "node scripts/install.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
