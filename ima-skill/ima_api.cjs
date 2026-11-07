@@ -13,6 +13,9 @@ const DEFAULT_LAST_CHECK_FILE = path.join(os.homedir(), '.config/ima/last_update
 const ERR_PROGRAMMATIC = -100;
 const ERR_UPDATE_AVAILABLE = -200;
 
+// 本进程内是否已经查过更新：节流文件不可写时，靠它避免每次调用都重查。
+let checkedThisProcess = false;
+
 function readFileSafe(filePath) {
   try {
     return fs.readFileSync(filePath, 'utf8').trim();
@@ -83,8 +86,12 @@ function readToday() {
 }
 
 function saveTodayChecked(lastCheckFile, today) {
-  ensureDir(lastCheckFile);
-  fs.writeFileSync(lastCheckFile, today, 'utf8');
+  try {
+    ensureDir(lastCheckFile);
+    fs.writeFileSync(lastCheckFile, today, 'utf8');
+  } catch {
+    // 节流文件只是省请求，写不进去就跳过，不影响命令本身。
+  }
 }
 
 async function checkSkillUpdateIfNeeded(requestOptions) {
@@ -93,9 +100,10 @@ async function checkSkillUpdateIfNeeded(requestOptions) {
   const today = readToday();
   const checkedDay = readFileSafe(lastCheckFile);
 
-  if (!forceCheck && checkedDay === today) {
+  if (!forceCheck && (checkedDay === today || checkedThisProcess)) {
     return;
   }
+  checkedThisProcess = true;
 
   let updateResponseText;
   try {
